@@ -1,0 +1,870 @@
+<%+header%>
+<style type="text/css">
+body {
+    background:
+        radial-gradient(circle at 12% 18%, rgba(67, 228, 255, 0.10) 0%, rgba(67, 228, 255, 0) 28%),
+        radial-gradient(circle at 88% 12%, rgba(88, 112, 255, 0.16) 0%, rgba(88, 112, 255, 0) 30%),
+        linear-gradient(180deg, #08111a 0%, #0b1320 100%);
+}
+
+:root {
+    --fan-text: #eef9ff;
+    --fan-muted: #93b4c8;
+    --fan-line: rgba(130, 214, 255, 0.12);
+    --fan-panel: rgba(8, 18, 30, 0.78);
+    --fan-cyan: #56e7ff;
+    --fan-blue: #7390ff;
+    --fan-green: #35f2a1;
+    --fan-orange: #ffbe55;
+    --fan-red: #ff6b6b;
+}
+
+.fan-shell {
+    position: relative;
+    margin: 16px 0;
+    padding: 28px;
+    border-radius: 28px;
+    overflow: hidden;
+    color: var(--fan-text);
+    background:
+        linear-gradient(135deg, rgba(7, 18, 30, 0.96) 0%, rgba(11, 30, 48, 0.96) 52%, rgba(7, 13, 22, 0.98) 100%);
+    box-shadow:
+        0 24px 70px rgba(0, 0, 0, 0.34),
+        inset 0 1px 0 rgba(255,255,255,0.05),
+        inset 0 0 0 1px rgba(97, 198, 255, 0.08);
+}
+
+.fan-shell:before,
+.fan-shell:after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.fan-shell:before {
+    width: 320px;
+    height: 320px;
+    top: -120px;
+    right: -110px;
+    background: radial-gradient(circle, rgba(72, 229, 255, 0.22) 0%, rgba(72, 229, 255, 0) 72%);
+    filter: blur(8px);
+}
+
+.fan-shell:after {
+    width: 340px;
+    height: 340px;
+    left: -120px;
+    bottom: -150px;
+    background: radial-gradient(circle, rgba(96, 109, 255, 0.18) 0%, rgba(96, 109, 255, 0) 74%);
+    filter: blur(10px);
+}
+
+.fan-grid-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.07;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(108, 220, 255, 0.22) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(108, 220, 255, 0.16) 1px, transparent 1px);
+    background-size: 26px 26px;
+}
+
+.fan-header {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 24px;
+}
+
+.fan-top {
+    overflow: hidden;
+    margin-bottom: 14px;
+}
+
+.fan-tag {
+    float: left;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(86, 231, 255, 0.34);
+    background: rgba(86, 231, 255, 0.10);
+    color: #8df0ff;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    box-shadow: 0 0 20px rgba(86, 231, 255, 0.10);
+}
+
+.fan-overview {
+    float: right;
+    min-width: 220px;
+    padding: 10px 14px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(124, 210, 255, 0.12);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+.fan-overview-line {
+    overflow: hidden;
+    line-height: 1.8;
+    font-size: 12px;
+}
+
+.fan-overview-label {
+    float: left;
+    color: var(--fan-muted);
+}
+
+.fan-overview-value {
+    float: right;
+    color: #dff8ff;
+    font-weight: bold;
+}
+
+.fan-title {
+    margin: 0 0 10px;
+    font-size: 32px;
+    line-height: 1.15;
+    color: #f8fcff;
+    letter-spacing: 0.4px;
+    text-shadow: 0 0 20px rgba(102, 214, 255, 0.10);
+}
+
+.fan-subtitle {
+    margin: 0;
+    max-width: 760px;
+    color: var(--fan-muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.fan-dashboard {
+    position: relative;
+    z-index: 1;
+}
+
+.fan-hero {
+    margin-bottom: 18px;
+    padding: 20px 22px;
+    border-radius: 22px;
+    background:
+        linear-gradient(135deg, rgba(86, 231, 255, 0.08) 0%, rgba(86, 231, 255, 0.02) 32%, rgba(115, 144, 255, 0.05) 100%),
+        rgba(7, 19, 32, 0.82);
+    border: 1px solid rgba(120, 206, 255, 0.14);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.04),
+        0 10px 30px rgba(0,0,0,0.16);
+    overflow: hidden;
+}
+
+.fan-hero-left {
+    float: left;
+    width: 64%;
+}
+
+.fan-hero-right {
+    float: right;
+    width: 32%;
+    text-align: right;
+}
+
+.fan-hero:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.fan-hero-label {
+    color: #8ec2da;
+    font-size: 12px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.fan-hero-value {
+    font-size: 52px;
+    font-weight: bold;
+    line-height: 1;
+    color: #ffffff;
+    text-shadow: 0 0 24px rgba(86, 231, 255, 0.12);
+}
+
+.fan-hero-unit {
+    font-size: 18px;
+    margin-left: 6px;
+    color: #95b9cf;
+    font-weight: normal;
+}
+
+.fan-hero-state {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    color: var(--fan-green);
+    border: 1px solid rgba(255,255,255,0.06);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.fan-hero-uptime {
+    margin-top: 12px;
+    color: #84e7ff;
+    font-size: 13px;
+    line-height: 1.6;
+    text-shadow: 0 0 12px rgba(86, 231, 255, 0.10);
+}
+
+.fan-hero-uptime-label {
+    margin-right: 8px;
+    color: #8fb1c8;
+}
+
+.fan-hero-meta {
+    margin-top: 12px;
+    color: #92b4c8;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.fan-card-row {
+    overflow: hidden;
+}
+
+.fan-card {
+    float: left;
+    width: 31%;
+    margin-right: 3.5%;
+    box-sizing: border-box;
+    padding: 22px;
+    border-radius: 22px;
+    position: relative;
+    overflow: hidden;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.015) 100%),
+        var(--fan-panel);
+    border: 1px solid var(--fan-line);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.05),
+        0 12px 30px rgba(0,0,0,0.18);
+}
+
+.fan-card.last {
+    margin-right: 0;
+}
+
+.fan-card:before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(135deg, rgba(86, 231, 255, 0.08) 0%, rgba(86, 231, 255, 0) 38%, rgba(115, 144, 255, 0.06) 100%);
+    pointer-events: none;
+}
+
+.fan-card:after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.025) 0%, rgba(255,255,255,0) 26%);
+    pointer-events: none;
+}
+
+.fan-card-head {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.fan-label {
+    float: left;
+    color: #b6d5e8;
+    font-size: 13px;
+}
+
+.fan-chip {
+    float: right;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    color: #d8f4ff;
+    border: 1px solid rgba(255,255,255,0.05);
+    font-size: 11px;
+}
+
+.fan-value {
+    position: relative;
+    z-index: 1;
+    font-size: 46px;
+    font-weight: bold;
+    line-height: 1;
+    color: #ffffff;
+    letter-spacing: -1px;
+    text-shadow: 0 0 18px rgba(96, 217, 255, 0.10);
+}
+
+.fan-unit {
+    margin-left: 6px;
+    font-size: 17px;
+    color: #92b7cd;
+    font-weight: normal;
+}
+
+.fan-bar-track {
+    position: relative;
+    z-index: 1;
+    margin-top: 18px;
+    height: 12px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.06);
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.03),
+        inset 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.fan-bar-track:before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        90deg,
+        rgba(255,255,255,0.04) 0px,
+        rgba(255,255,255,0.04) 10px,
+        rgba(255,255,255,0) 10px,
+        rgba(255,255,255,0) 18px
+    );
+}
+
+.fan-bar {
+    width: 0;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--fan-cyan) 0%, var(--fan-blue) 100%);
+    box-shadow: 0 0 20px rgba(86, 231, 255, 0.30);
+    transition: width 0.4s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.fan-meta {
+    position: relative;
+    z-index: 1;
+    margin-top: 12px;
+    color: #8fb1c8;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.fan-footer {
+    clear: both;
+    position: relative;
+    z-index: 1;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    color: #89abc0;
+    font-size: 13px;
+}
+
+.fan-live-dot {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    margin-right: 8px;
+    border-radius: 50%;
+    background: var(--fan-green);
+    box-shadow: 0 0 0 rgba(53, 242, 161, 0.4);
+    animation: fanPulse 1.8s infinite;
+    vertical-align: middle;
+}
+
+@keyframes fanPulse {
+    0% { box-shadow: 0 0 0 0 rgba(53, 242, 161, 0.42); }
+    70% { box-shadow: 0 0 0 10px rgba(53, 242, 161, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(53, 242, 161, 0); }
+}
+
+@media screen and (max-width: 960px) {
+    .fan-shell {
+        margin: 12px 0;
+        padding: 22px 18px;
+        border-radius: 24px;
+    }
+
+    .fan-top {
+        margin-bottom: 12px;
+    }
+
+    .fan-overview,
+    .fan-tag,
+    .fan-hero-left,
+    .fan-hero-right,
+    .fan-card,
+    .fan-card.last {
+        float: none;
+    }
+
+    .fan-overview {
+        display: inline-block;
+        margin-top: 10px;
+        min-width: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .fan-hero-left,
+    .fan-hero-right {
+        width: 100%;
+        text-align: left;
+    }
+
+    .fan-hero-right {
+        margin-top: 14px;
+    }
+
+    .fan-card,
+    .fan-card.last {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 14px;
+    }
+
+    .fan-title {
+        font-size: 26px;
+    }
+
+    .fan-hero-value,
+    .fan-value {
+        font-size: 40px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    body {
+        background:
+            radial-gradient(circle at 16% 14%, rgba(67, 228, 255, 0.12) 0%, rgba(67, 228, 255, 0) 26%),
+            linear-gradient(180deg, #08111a 0%, #0b1320 100%);
+    }
+
+    .fan-shell {
+        margin: 8px 0;
+        padding: 16px 14px;
+        border-radius: 20px;
+    }
+
+    .fan-shell:before {
+        width: 180px;
+        height: 180px;
+        top: -70px;
+        right: -60px;
+    }
+
+    .fan-shell:after {
+        width: 200px;
+        height: 200px;
+        left: -80px;
+        bottom: -90px;
+    }
+
+    .fan-grid-bg {
+        background-size: 20px 20px;
+    }
+
+    .fan-tag {
+        display: inline-block;
+        width: auto;
+        padding: 6px 12px;
+        font-size: 10px;
+        letter-spacing: 1.4px;
+    }
+
+    .fan-overview {
+        margin-top: 12px;
+        padding: 10px 12px;
+        border-radius: 14px;
+    }
+
+    .fan-overview-line {
+        font-size: 11px;
+        line-height: 1.7;
+    }
+
+    .fan-title {
+        margin-bottom: 8px;
+        font-size: 22px;
+        line-height: 1.2;
+    }
+
+    .fan-subtitle {
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    .fan-hero {
+        padding: 16px 14px;
+        border-radius: 18px;
+    }
+
+    .fan-hero-label {
+        margin-bottom: 8px;
+        font-size: 11px;
+        letter-spacing: 1.1px;
+    }
+
+    .fan-hero-value {
+        font-size: 34px;
+    }
+
+    .fan-hero-unit {
+        font-size: 16px;
+        margin-left: 4px;
+    }
+
+    .fan-hero-state {
+        margin-top: 10px;
+        padding: 7px 12px;
+        font-size: 11px;
+    }
+
+    .fan-hero-uptime {
+        display: block;
+        margin-top: 10px;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    .fan-hero-uptime-label {
+        display: block;
+        margin-right: 0;
+        margin-bottom: 2px;
+    }
+
+    .fan-hero-meta {
+        margin-top: 12px;
+        font-size: 12px;
+        line-height: 1.75;
+    }
+
+    .fan-card,
+    .fan-card.last {
+        margin-bottom: 12px;
+        padding: 16px 14px;
+        border-radius: 18px;
+    }
+
+    .fan-card-head {
+        margin-bottom: 14px;
+    }
+
+    .fan-label {
+        font-size: 12px;
+        line-height: 1.5;
+        max-width: 72%;
+    }
+
+    .fan-chip {
+        padding: 5px 10px;
+        font-size: 10px;
+    }
+
+    .fan-value {
+        font-size: 32px;
+        line-height: 1.1;
+    }
+
+    .fan-unit {
+        margin-left: 4px;
+        font-size: 14px;
+    }
+
+    .fan-meta,
+    .fan-footer {
+        font-size: 11px;
+        line-height: 1.7;
+    }
+
+    .fan-footer {
+        margin-top: 18px;
+        padding-top: 14px;
+    }
+}
+</style>
+
+<div class="fan-shell">
+    <div class="fan-grid-bg"></div>
+
+    <div class="fan-header">
+        <div class="fan-top">
+            <span class="fan-tag">SYSTEM TELEMETRY</span>
+
+            <div class="fan-overview">
+                <div class="fan-overview-line">
+                    <span class="fan-overview-label">系统状态</span>
+                    <span class="fan-overview-value" id="system_state">凉快</span>
+                </div>
+                <div class="fan-overview-line">
+                    <span class="fan-overview-label">刷新频率</span>
+                    <span class="fan-overview-value">5 秒</span>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="fan-title">温度监测仪表</h2>
+        <p class="fan-subtitle">系统温度实时监测</p>
+    </div>
+
+    <div class="fan-dashboard">
+        <div class="fan-hero">
+            <div class="fan-hero-left">
+                <div class="fan-hero-label">CPU 温度总览</div>
+                <div class="fan-hero-value" id="hero_cpu">--<span class="fan-hero-unit">℃</span></div>
+                <div class="fan-hero-state" id="hero_state">检测中</div>
+                <div class="fan-hero-uptime">
+                    <span class="fan-hero-uptime-label">系统运行时间</span>
+                    <span id="system_uptime">读取中...</span>
+                </div>
+            </div>
+            <div class="fan-hero-right">
+                <div class="fan-hero-label">热状态分析</div>
+                <div class="fan-hero-meta" id="hero_meta">等待传感器数据接入，准备生成实时热状态分析。</div>
+            </div>
+        </div>
+
+        <div class="fan-card-row">
+            <div class="fan-card">
+                <div class="fan-card-head">
+                    <div class="fan-label">CPU 温度</div>
+                    <div class="fan-chip" id="cpu_state">检测中</div>
+                </div>
+                <div class="fan-value" id="cpu_t">--<span class="fan-unit">℃</span></div>
+                <div class="fan-bar-track"><div class="fan-bar" id="cpu_bar"></div></div>
+                <div class="fan-meta" id="cpu_meta">等待数据</div>
+            </div>
+
+            <div class="fan-card">
+                <div class="fan-card-head">
+                    <div class="fan-label">5G 模组温度</div>
+                    <div class="fan-chip" id="mod_state">MODULE</div>
+                </div>
+                <div class="fan-value" id="mod_t">--<span class="fan-unit">℃</span></div>
+                <div class="fan-bar-track"><div class="fan-bar" id="mod_bar"></div></div>
+                <div class="fan-meta" id="mod_meta">等待数据</div>
+            </div>
+
+            <div class="fan-card last">
+                <div class="fan-card-head">
+                    <div class="fan-label">风扇转速</div>
+                    <div class="fan-chip" id="fan_state">PWM</div>
+                </div>
+                <div class="fan-value" id="fan_s">--<span class="fan-unit">%</span></div>
+                <div class="fan-bar-track"><div class="fan-bar" id="fan_bar"></div></div>
+                <div class="fan-meta" id="fan_meta">等待数据</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fan-footer">
+        <span class="fan-live-dot"></span>
+        <span id="refresh_hint">每 5 秒自动刷新一次</span>
+    </div>
+</div>
+
+<script type="text/javascript">
+function fanClamp(value, min, max) {
+    if (value < min) return min;
+    if (value > max) return max;
+    return value;
+}
+
+function cpuTempState(temp) {
+    if (temp > 65) {
+        return {
+            text: '热',
+            color: '#ff6b6b',
+            bar: 'linear-gradient(90deg, #ff8a5b 0%, #ff4d6d 100%)',
+            glow: '0 0 20px rgba(255, 107, 107, 0.34)'
+        };
+    }
+    if (temp >= 56) {
+        return {
+            text: '舒适',
+            color: '#ffbe55',
+            bar: 'linear-gradient(90deg, #ffd166 0%, #ff9f43 100%)',
+            glow: '0 0 20px rgba(255, 190, 85, 0.30)'
+        };
+    }
+    return {
+        text: '凉快',
+        color: '#35f2a1',
+        bar: 'linear-gradient(90deg, #35f2a1 0%, #1ad6ff 100%)',
+        glow: '0 0 20px rgba(53, 242, 161, 0.28)'
+    };
+}
+
+function modTempState(temp) {
+    if (temp > 60) {
+        return {
+            text: '热',
+            color: '#ff6b6b',
+            bar: 'linear-gradient(90deg, #ff8a5b 0%, #ff4d6d 100%)',
+            glow: '0 0 20px rgba(255, 107, 107, 0.34)'
+        };
+    }
+    if (temp >= 50) {
+        return {
+            text: '合理',
+            color: '#ffbe55',
+            bar: 'linear-gradient(90deg, #ffd166 0%, #ff9f43 100%)',
+            glow: '0 0 20px rgba(255, 190, 85, 0.30)'
+        };
+    }
+    return {
+        text: '凉快',
+        color: '#35f2a1',
+        bar: 'linear-gradient(90deg, #35f2a1 0%, #1ad6ff 100%)',
+        glow: '0 0 20px rgba(53, 242, 161, 0.28)'
+    };
+}
+
+function setValue(id, value, unit) {
+    document.getElementById(id).innerHTML = value + '<span class="fan-unit">' + unit + '</span>';
+}
+
+function setBar(id, percent, bg, glow) {
+    var el = document.getElementById(id);
+    el.style.width = fanClamp(percent, 0, 100) + '%';
+    el.style.background = bg;
+    if (glow) {
+        el.style.boxShadow = glow;
+    }
+}
+
+var fanUptimeSeconds = 0;
+var fanUptimeTick = null;
+var fanUptimeBaseSeconds = 0;
+var fanUptimeBaseAt = 0;
+
+function formatUptime(totalSeconds) {
+    var seconds = Math.max(0, parseInt(totalSeconds, 10) || 0);
+    var days = Math.floor(seconds / 86400);
+    var hours = Math.floor((seconds % 86400) / 3600);
+    var minutes = Math.floor((seconds % 3600) / 60);
+    var secs = seconds % 60;
+    var parts = [];
+
+    if (days > 0) {
+        parts.push(days + ' 天');
+    }
+    if (hours > 0 || days > 0) {
+        parts.push(hours + ' 小时');
+    }
+    if (minutes > 0 || hours > 0 || days > 0) {
+        parts.push(minutes + ' 分');
+    }
+    parts.push(secs + ' 秒');
+
+    return parts.join(' ');
+}
+
+function renderUptime(seconds) {
+    fanUptimeBaseSeconds = Math.max(0, parseInt(seconds, 10) || 0);
+    fanUptimeBaseAt = Date.now();
+    fanUptimeSeconds = fanUptimeBaseSeconds;
+    document.getElementById('system_uptime').innerHTML = formatUptime(fanUptimeSeconds);
+}
+
+function startUptimeTicker() {
+    if (fanUptimeTick) {
+        return;
+    }
+    fanUptimeTick = setInterval(function() {
+        if (fanUptimeBaseAt > 0) {
+            fanUptimeSeconds = fanUptimeBaseSeconds + Math.floor((Date.now() - fanUptimeBaseAt) / 1000);
+        }
+        document.getElementById('system_uptime').innerHTML = formatUptime(fanUptimeSeconds);
+    }, 1000);
+}
+
+function renderFanData(data) {
+    var cpu = parseInt(data.cpu, 10) || 0;
+    var mod = parseInt(data.model, 10) || 0;
+    var fan = Math.round(parseFloat(data.fan) || 0);
+
+    var cpuState = cpuTempState(cpu);
+    var modState = modTempState(mod);
+
+    setValue('cpu_t', cpu, '℃');
+    setValue('mod_t', mod, '℃');
+    setValue('fan_s', fan, '%');
+    setValue('hero_cpu', cpu, '℃');
+
+    setBar('cpu_bar', cpu, cpuState.bar, cpuState.glow);
+    setBar('mod_bar', mod, modState.bar, modState.glow);
+    setBar('fan_bar', fan, 'linear-gradient(90deg, #56e7ff 0%, #7390ff 100%)', '0 0 20px rgba(86, 231, 255, 0.28)');
+
+    document.getElementById('cpu_state').innerHTML = cpuState.text;
+    document.getElementById('cpu_state').style.color = cpuState.color;
+
+    document.getElementById('mod_state').innerHTML = modState.text;
+    document.getElementById('mod_state').style.color = modState.color;
+
+    document.getElementById('fan_state').innerHTML = fan >= 50 ? 'BOOST' : (fan >= 30 ? 'MID' : 'LOW');
+    document.getElementById('fan_state').style.color = fan >= 50 ? '#56e7ff' : '#cfe6f3';
+
+    document.getElementById('system_state').innerHTML = cpuState.text;
+    document.getElementById('system_state').style.color = cpuState.color;
+
+    document.getElementById('hero_state').innerHTML = cpuState.text;
+    document.getElementById('hero_state').style.color = cpuState.color;
+
+    document.getElementById('hero_meta').innerHTML = cpu > 65
+        ? '当前 CPU 温度偏高，系统已进入热负载区间，请关注散热和风扇响应。'
+        : (cpu >= 56
+            ? '当前 CPU 温度处于舒适区间，系统运行稳定，散热状态良好。'
+            : '当前 CPU 温度较低，系统处于凉快状态，散热余量充足。');
+
+    document.getElementById('cpu_meta').innerHTML = cpu > 65
+        ? 'CPU 温度高于 65℃，当前偏热'
+        : (cpu >= 56
+            ? 'CPU 温度处于 56-65℃，当前舒适'
+            : 'CPU 温度低于 55℃，当前凉快');
+
+    document.getElementById('mod_meta').innerHTML = mod > 60
+        ? '5G 模组温度高于 60℃，当前偏热'
+        : (mod >= 50
+            ? '5G 模组温度处于 50-60℃，当前合理'
+            : '5G 模组温度低于 50℃，当前凉快');
+
+    document.getElementById('fan_meta').innerHTML = fan >= 50
+        ? '风扇正在积极增压响应温度变化'
+        : (fan >= 30
+            ? '风扇处于均衡巡航状态'
+            : '风扇低速静音运行');
+
+    if (typeof data.uptime !== 'undefined') {
+        renderUptime(data.uptime);
+    }
+    document.getElementById('refresh_hint').innerHTML = '刷新于 ' + new Date().toLocaleTimeString();
+}
+
+function fanFetch() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/fan_data.json?t=' + Math.random(), true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            try {
+                renderFanData(JSON.parse(xhr.responseText));
+            } catch (e) {}
+        }
+    };
+    xhr.send();
+}
+
+fanFetch();
+startUptimeTicker();
+setInterval(fanFetch, 5000);
+</script>
+<%+footer%>

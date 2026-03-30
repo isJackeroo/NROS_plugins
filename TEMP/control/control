@@ -1,0 +1,5 @@
+Package: 温度监控
+Version: 0.1.1
+Architecture: all
+Maintainer: Jackeroo
+Description: 适配鲲鹏无限的C2000 Max设备的CPU温度、5G模块温度、内置4 PIN（默认没安装风扇）风扇的PWM占空比

@@ -1,0 +1,6 @@
+#!/bin/sh
+chmod +x /usr/bin/fan_commander.sh
+/etc/init.d/fan_commander enable
+/etc/init.d/fan_commander start
+rm -rf /tmp/luci-indexcache /tmp/luci-modulecache
+exit 0
