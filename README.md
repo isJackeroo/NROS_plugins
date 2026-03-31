@@ -51,7 +51,14 @@
 
 ## 支持的运行方式
 
-### 1. 交互菜单模式
+### 1. 一条命令行方式
+> 需要确保你的C2000 Max可以正常访问GitHub，否则拉取不了代码
+```sh
+curl -L https://raw.githubusercontent.com/isJackeroo/NROS_plugins/refs/heads/main/plugins_0330.sh \
+  -o plugins_0330.sh && chmod +x plugins_0330.sh && ./plugins_0330.sh
+```
+
+### 2. 交互菜单模式
 
 直接执行：
 
@@ -68,7 +75,7 @@ sh plugins_0330.sh
 4. 生成 appcenter_modified_v1.htm
 ```
 
-### 2. 命令行模式
+### 3. 命令行模式
 
 安装 `ttyd`：
 
