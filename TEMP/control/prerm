@@ -1,0 +1,5 @@
+#!/bin/sh
+/etc/init.d/fan_commander stop
+pkill -9 -f "fan_commander.sh"
+rm -f /etc/fan_reported.lock /www/fan_data.json
+exit 0

@@ -1,10 +1,12 @@
 <%+header%>
+<%
+local uci_fs = require "luci.model.uci".cursor()
+local init_mode = uci_fs:get("fanctrl", "fanctrl", "manual_mode") or "0"
+local init_speed = uci_fs:get("fanctrl", "fanctrl", "fanspeed") or "10"
+%>
 <style type="text/css">
 body {
-    background:
-        radial-gradient(circle at 12% 18%, rgba(67, 228, 255, 0.10) 0%, rgba(67, 228, 255, 0) 28%),
-        radial-gradient(circle at 88% 12%, rgba(88, 112, 255, 0.16) 0%, rgba(88, 112, 255, 0) 30%),
-        linear-gradient(180deg, #08111a 0%, #0b1320 100%);
+    background:none;
 }
 
 :root {
@@ -21,17 +23,12 @@ body {
 
 .fan-shell {
     position: relative;
-    margin: 16px 0;
-    padding: 28px;
-    border-radius: 28px;
+    margin: 32px 0;
+    padding: 8px;
+    border-radius: 8px;
     overflow: hidden;
     color: var(--fan-text);
-    background:
-        linear-gradient(135deg, rgba(7, 18, 30, 0.96) 0%, rgba(11, 30, 48, 0.96) 52%, rgba(7, 13, 22, 0.98) 100%);
-    box-shadow:
-        0 24px 70px rgba(0, 0, 0, 0.34),
-        inset 0 1px 0 rgba(255,255,255,0.05),
-        inset 0 0 0 1px rgba(97, 198, 255, 0.08);
+    background:none;
 }
 
 .fan-shell:before,
@@ -47,7 +44,6 @@ body {
     height: 320px;
     top: -120px;
     right: -110px;
-    background: radial-gradient(circle, rgba(72, 229, 255, 0.22) 0%, rgba(72, 229, 255, 0) 72%);
     filter: blur(8px);
 }
 
@@ -56,7 +52,6 @@ body {
     height: 340px;
     left: -120px;
     bottom: -150px;
-    background: radial-gradient(circle, rgba(96, 109, 255, 0.18) 0%, rgba(96, 109, 255, 0) 74%);
     filter: blur(10px);
 }
 
@@ -84,7 +79,7 @@ body {
 
 .fan-tag {
     float: left;
-    padding: 6px 14px;
+    padding: 6px 20px;
     border-radius: 999px;
     border: 1px solid rgba(86, 231, 255, 0.34);
     background: rgba(86, 231, 255, 0.10);
@@ -147,10 +142,6 @@ body {
 .fan-hero {
     margin-bottom: 18px;
     padding: 20px 22px;
-    border-radius: 22px;
-    background:
-        linear-gradient(135deg, rgba(86, 231, 255, 0.08) 0%, rgba(86, 231, 255, 0.02) 32%, rgba(115, 144, 255, 0.05) 100%),
-        rgba(7, 19, 32, 0.82);
     border: 1px solid rgba(120, 206, 255, 0.14);
     box-shadow:
         inset 0 1px 0 rgba(255,255,255,0.04),
@@ -243,9 +234,6 @@ body {
     border-radius: 22px;
     position: relative;
     overflow: hidden;
-    background:
-        linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.015) 100%),
-        var(--fan-panel);
     border: 1px solid var(--fan-line);
     box-shadow:
         inset 0 1px 0 rgba(255,255,255,0.05),
@@ -369,6 +357,68 @@ body {
     font-size: 13px;
 }
 
+.fan-control-panel {
+    position: relative;
+    z-index: 1;
+    margin-top: 18px;
+    padding: 18px 20px;
+    border-radius: 22px;
+    border: 1px solid rgba(130, 214, 255, 0.12);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.05),
+        0 12px 30px rgba(0,0,0,0.18);
+}
+
+.fan-control-head {
+    overflow: hidden;
+    margin-bottom: 14px;
+}
+
+.fan-mode-group {
+    float: left;
+}
+
+.fan-mode-btn {
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.05);
+    color: #dff8ff;
+    padding: 8px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.fan-mode-btn.active {
+    background: rgba(86, 231, 255, 0.16);
+    border-color: rgba(86, 231, 255, 0.34);
+    color: #8df0ff;
+}
+
+.fan-control-value {
+    float: right;
+    color: #dff8ff;
+    font-size: 13px;
+    line-height: 34px;
+}
+
+.fan-slider-wrap {
+    clear: both;
+}
+
+.fan-slider {
+    width: 100%;
+}
+
+.fan-slider[disabled] {
+    opacity: 0.4;
+}
+
+.fan-control-tip {
+    margin-top: 10px;
+    color: #8fb1c8;
+    font-size: 12px;
+}
+
 .fan-live-dot {
     display: inline-block;
     width: 9px;
@@ -444,9 +494,7 @@ body {
 
 @media screen and (max-width: 480px) {
     body {
-        background:
-            radial-gradient(circle at 16% 14%, rgba(67, 228, 255, 0.12) 0%, rgba(67, 228, 255, 0) 26%),
-            linear-gradient(180deg, #08111a 0%, #0b1320 100%);
+        background:none;
     }
 
     .fan-shell {
@@ -590,6 +638,23 @@ body {
         margin-top: 18px;
         padding-top: 14px;
     }
+
+    .fan-control-panel {
+        margin-top: 12px;
+        padding: 16px 14px;
+        border-radius: 18px;
+    }
+
+    .fan-mode-group,
+    .fan-control-value {
+        float: none;
+    }
+
+    .fan-control-value {
+        display: block;
+        margin-top: 10px;
+        line-height: 1.6;
+    }
 }
 </style>
 
@@ -612,18 +677,18 @@ body {
             </div>
         </div>
 
-        <h2 class="fan-title">温度监测仪表</h2>
-        <p class="fan-subtitle">系统温度实时监测</p>
+        <h2 class="fan-title">温度监测</h2>
+        <p class="fan-subtitle">实时状态</p>
     </div>
 
     <div class="fan-dashboard">
         <div class="fan-hero">
             <div class="fan-hero-left">
-                <div class="fan-hero-label">CPU 温度总览</div>
+                <div class="fan-hero-label">CPU 温度</div>
                 <div class="fan-hero-value" id="hero_cpu">--<span class="fan-hero-unit">℃</span></div>
                 <div class="fan-hero-state" id="hero_state">检测中</div>
                 <div class="fan-hero-uptime">
-                    <span class="fan-hero-uptime-label">系统运行时间</span>
+                    <span class="fan-hero-uptime-label">开机已运行</span>
                     <span id="system_uptime">读取中...</span>
                 </div>
             </div>
@@ -656,12 +721,26 @@ body {
 
             <div class="fan-card last">
                 <div class="fan-card-head">
-                    <div class="fan-label">风扇转速</div>
+                    <div class="fan-label">风扇转数（占空比）</div>
                     <div class="fan-chip" id="fan_state">PWM</div>
                 </div>
                 <div class="fan-value" id="fan_s">--<span class="fan-unit">%</span></div>
                 <div class="fan-bar-track"><div class="fan-bar" id="fan_bar"></div></div>
                 <div class="fan-meta" id="fan_meta">等待数据</div>
+            </div>
+        </div>
+
+        <div class="fan-control-panel">
+            <div class="fan-control-head">
+                <div class="fan-mode-group">
+                    <button id="btn_auto" class="fan-mode-btn" type="button" onclick="switchMode(0)">自动</button>
+                    <button id="btn_manual" class="fan-mode-btn" type="button" onclick="switchMode(1)">手动</button>
+                </div>
+                <div class="fan-control-value">目标占空比 <span id="speed_val"><%=init_speed%></span>%</div>
+            </div>
+            <div class="fan-slider-wrap">
+                <input id="speed_range" class="fan-slider" type="range" min="0" max="100" step="1" value="<%=init_speed%>" oninput="handleManualInput()" onchange="applyManual()" />
+                <div class="fan-control-tip" id="control_tip">自动模式下由温度脚本接管，切换到手动模式后可直接设置风扇占空比。</div>
             </div>
         </div>
     </div>
@@ -746,6 +825,9 @@ var fanUptimeSeconds = 0;
 var fanUptimeTick = null;
 var fanUptimeBaseSeconds = 0;
 var fanUptimeBaseAt = 0;
+var fanCurrentMode = '<%=init_mode%>';
+var fanManualTarget = parseInt('<%=init_speed%>', 10) || 10;
+var fanManualApplyTimer = null;
 
 function formatUptime(totalSeconds) {
     var seconds = Math.max(0, parseInt(totalSeconds, 10) || 0);
@@ -792,6 +874,18 @@ function renderFanData(data) {
     var cpu = parseInt(data.cpu, 10) || 0;
     var mod = parseInt(data.model, 10) || 0;
     var fan = Math.round(parseFloat(data.fan) || 0);
+    var isManual = String(fanCurrentMode) === '1';
+    var slider = document.getElementById('speed_range');
+
+    if (isManual) {
+        fan = fanManualTarget;
+    } else {
+        fanManualTarget = fan;
+        if (slider) {
+            slider.value = fan;
+        }
+        document.getElementById('speed_val').innerHTML = fan;
+    }
 
     var cpuState = cpuTempState(cpu);
     var modState = modTempState(mod);
@@ -835,14 +929,18 @@ function renderFanData(data) {
     document.getElementById('mod_meta').innerHTML = mod > 60
         ? '5G 模组温度高于 60℃，当前偏热'
         : (mod >= 50
-            ? '5G 模组温度处于 50-60℃，当前合理'
+            ? '模组温度 50-60℃，当前合理'
             : '5G 模组温度低于 50℃，当前凉快');
 
     document.getElementById('fan_meta').innerHTML = fan >= 50
         ? '风扇正在积极增压响应温度变化'
         : (fan >= 30
-            ? '风扇处于均衡巡航状态'
+            ? '低转速区间'
             : '风扇低速静音运行');
+
+    if (isManual) {
+        document.getElementById('fan_meta').innerHTML = '手动模式目标占空比已设置为 ' + fanManualTarget + '%';
+    }
 
     if (typeof data.uptime !== 'undefined') {
         renderUptime(data.uptime);
@@ -863,8 +961,84 @@ function fanFetch() {
     xhr.send();
 }
 
+function buildUrl(path) {
+    return '<%=luci.dispatcher.build_url("admin", "status")%>/' + path;
+}
+
+function updateSpeedLabel() {
+    var sliderValue = parseInt(document.getElementById('speed_range').value, 10) || 0;
+    fanManualTarget = sliderValue;
+    document.getElementById('speed_val').innerHTML = sliderValue;
+}
+
+function renderMode(mode) {
+    var autoBtn = document.getElementById('btn_auto');
+    var manualBtn = document.getElementById('btn_manual');
+    var slider = document.getElementById('speed_range');
+    var tip = document.getElementById('control_tip');
+    var isManual = String(mode) === '1';
+    fanCurrentMode = String(mode);
+
+    autoBtn.className = isManual ? 'fan-mode-btn' : 'fan-mode-btn active';
+    manualBtn.className = isManual ? 'fan-mode-btn active' : 'fan-mode-btn';
+    slider.disabled = !isManual;
+    if (!isManual && fanManualApplyTimer) {
+        clearTimeout(fanManualApplyTimer);
+        fanManualApplyTimer = null;
+    }
+    if (isManual) {
+        fanManualTarget = parseInt(slider.value, 10) || fanManualTarget;
+    } else {
+        slider.value = fanManualTarget;
+        document.getElementById('speed_val').innerHTML = fanManualTarget;
+    }
+    tip.innerHTML = isManual
+        ? '手动模式已启用，调整滑杆后会立即写入新的风扇占空比。'
+        : '自动模式下由温度脚本接管，切换到手动模式后可直接设置风扇占空比。';
+}
+
+function switchMode(mode) {
+    renderMode(mode);
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', buildUrl('fanctrl_set') + '?mode=' + mode, true);
+    xhr.send();
+}
+
+function handleManualInput() {
+    updateSpeedLabel();
+    if (String(fanCurrentMode) === '1') {
+        setValue('fan_s', fanManualTarget, '%');
+        setBar('fan_bar', fanManualTarget, 'linear-gradient(90deg, #56e7ff 0%, #7390ff 100%)', '0 0 20px rgba(86, 231, 255, 0.28)');
+        document.getElementById('fan_state').innerHTML = fanManualTarget >= 50 ? 'BOOST' : (fanManualTarget >= 30 ? 'MID' : 'LOW');
+        document.getElementById('fan_state').style.color = fanManualTarget >= 50 ? '#56e7ff' : '#cfe6f3';
+        document.getElementById('fan_meta').innerHTML = '手动模式目标占空比已设置为 ' + fanManualTarget + '%';
+    }
+}
+
+function applyManual() {
+    var slider = document.getElementById('speed_range');
+    if (slider.disabled) {
+        return;
+    }
+
+    handleManualInput();
+
+    if (fanManualApplyTimer) {
+        clearTimeout(fanManualApplyTimer);
+    }
+
+    fanManualApplyTimer = setTimeout(function() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', buildUrl('fanctrl_set') + '?speed=' + fanManualTarget, true);
+        xhr.send();
+        fanManualApplyTimer = null;
+    }, 150);
+}
+
 fanFetch();
 startUptimeTicker();
+renderMode(<%=init_mode%>);
+updateSpeedLabel();
 setInterval(fanFetch, 5000);
 </script>
 <%+footer%>

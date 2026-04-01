@@ -1,6 +1,11 @@
 #!/bin/sh
+if [ ! -f "/etc/config/fanctrl" ]; then
+    touch /etc/config/fanctrl
+    uci set fanctrl.fanctrl=fanctrl
+    uci set fanctrl.fanctrl.manual_mode='0'
+    uci commit fanctrl
+fi
 chmod +x /usr/bin/fan_commander.sh
-/etc/init.d/fan_commander enable
-/etc/init.d/fan_commander start
+/etc/init.d/fan_commander enable && /etc/init.d/fan_commander start
 rm -rf /tmp/luci-indexcache /tmp/luci-modulecache
 exit 0
